@@ -1,4 +1,5 @@
 using API.DTO;
+using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -28,6 +29,7 @@ public class ProductsController : ApiBaseController
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(ProductResponseDto[]), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<ProductResponseDto>>> GetProducts()
     {
         var spec = new ProductsSpecification();
@@ -37,21 +39,30 @@ public class ProductsController : ApiBaseController
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductResponseDto>> GetProduct(int id)
     {
         var spec = new ProductsSpecification(id);
         var product = await this._productRepository.GetEntityWithSpec(spec);
 
+        if (product is null)
+        {
+            return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
+        }
+
         return Ok(_mapper.Map<Product, ProductResponseDto>(product));
     }
 
     [HttpGet("brands")]
+    [ProducesResponseType(typeof(ProductBrand[]), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProductBrand>>> GetBrands()
     {
         return Ok(await this._productBrandRepository.GetAllAsync());
     }
 
     [HttpGet("types")]
+    [ProducesResponseType(typeof(ProductType[]), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProductType>>> GetTypes()
     {
         return Ok(await this._productTypeRepository.GetAllAsync());
