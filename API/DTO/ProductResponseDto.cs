@@ -1,9 +1,9 @@
-using Core.Entities;
-
 namespace API.DTO;
 
-public class ProductResponseDto : BaseEntity
+public class ProductResponseDto
 {
+    public int Id { get; set; }
+
     public string Name { get; set; }
 
     public string Description { get; set; }
