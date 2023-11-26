@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
+
 public class ProductRepository : IProductRepository
 {
     public StellarDbContext _context;

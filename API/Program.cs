@@ -1,4 +1,5 @@
 using Core.Interfaces;
+using Core.Specifications;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(ISpecification<>), typeof(BaseSpecification<>));
 
 builder.Services.AddDbContext<StellarDbContext>(option => 
 {
