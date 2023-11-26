@@ -1,7 +1,6 @@
 using Core.Entities;
-using Infrastructure.Data;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -9,18 +8,38 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly StellarDbContext _context;
+    private readonly IProductRepository _productRepository;
 
-    public ProductsController(StellarDbContext context)
+    public ProductsController(IProductRepository productRepository)
     {
-        this._context = context;
+        _productRepository = productRepository;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetProducts()
     {
-        var products = await this._context.Products.ToListAsync();
+        var products = await this._productRepository.GetProductsAsync();
 
         return Ok(products);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Product>> GetProduct(int id)
+    {
+        var product = await this._productRepository.GetProductByIdAsync(id);
+
+        return Ok(product);
+    }
+
+    [HttpGet("brands")]
+    public async Task<ActionResult<List<ProductBrand>>> GetBrands()
+    {
+        return Ok(await this._productRepository.GetProductBrandsAsync());
+    }
+
+    [HttpGet("types")]
+    public async Task<ActionResult<List<ProductType>>> GetTypes()
+    {
+        return Ok(await this._productRepository.GetProductTypesAsync());
     }
 }
