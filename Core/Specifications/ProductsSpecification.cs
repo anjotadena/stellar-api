@@ -1,10 +1,10 @@
-using System.Linq.Expressions;
 using Core.Entities;
 
 namespace Core.Specifications;
 public class ProductsSpecification : BaseSpecification<Product>
 {
-    public ProductsSpecification(string sort)
+    public ProductsSpecification(string sort, int? brandId, int? typeId)
+        : base(x => (!brandId.HasValue || x.ProductBrandId == brandId.Value) && (!typeId.HasValue || x.ProductTypeId == typeId.Value))
     {
         AddInclude(x => x.ProductBrand);
         AddInclude(x => x.ProductType);

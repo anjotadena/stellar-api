@@ -30,9 +30,9 @@ public class ProductsController : ApiBaseController
 
     [HttpGet]
     [ProducesResponseType(typeof(ProductResponseDto[]), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<ProductResponseDto>>> GetProducts(string sort)
+    public async Task<ActionResult<IReadOnlyList<ProductResponseDto>>> GetProducts(string sort, int? brandId, int typeId)
     {
-        var spec = new ProductsSpecification(sort);
+        var spec = new ProductsSpecification(sort, brandId, typeId);
         var products = await this._productRepository.ListAsync(spec);
 
         return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductResponseDto>>(products));
