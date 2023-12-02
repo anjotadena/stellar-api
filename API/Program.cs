@@ -25,6 +25,8 @@ app.UseAuthorization();
 
 app.UseStaticFiles();
 
+app.UseCors("CorsPolicy");
+
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
