@@ -5,6 +5,7 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API.Extensions;
 
@@ -24,6 +25,13 @@ public static class ApplicationServicesExtensions
         services.AddDbContext<StellarDbContext>(option =>
         {
             option.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
+        });
+
+        services.AddSingleton<IConnectionMultiplexer>(c =>
+        {
+            var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
+
+            return ConnectionMultiplexer.Connect(options);
         });
 
         services.Configure<ApiBehaviorOptions>(options =>
