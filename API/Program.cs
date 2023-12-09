@@ -22,11 +22,12 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseAuthorization();
-
 app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
