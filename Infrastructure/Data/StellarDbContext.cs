@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Data;
 public class StellarDbContext : DbContext
 {
-    public StellarDbContext(DbContextOptions options) : base(options)
+    public StellarDbContext(DbContextOptions<StellarDbContext> options) : base(options)
     {
     }
 
