@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -19,6 +20,7 @@ public static class ApplicationServicesExtensions
 
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(ISpecification<>), typeof(BaseSpecification<>));
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
