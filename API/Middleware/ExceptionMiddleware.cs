@@ -19,11 +19,12 @@ namespace API.Middleware;
         {
             try
             {
+                Console.WriteLine("-----Error--");
                 await _next(context);   
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                Console.WriteLine("-fff-Error--");
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
