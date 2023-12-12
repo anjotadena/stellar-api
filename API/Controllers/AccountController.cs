@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using API.DTO;
 using API.Errors;
+using API.Extensions;
+using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
@@ -18,8 +20,11 @@ public class AccountController : ApiBaseController
     private readonly SignInManager<AppUser> _signInManager;
     private readonly ITokenService _tokenService;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
+    private readonly IMapper _mapper;
+
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IMapper mapper)
     {
+        _mapper = mapper;
         _signInManager = signInManager;
         _userManager = userManager;
         _tokenService = tokenService;
@@ -29,8 +34,7 @@ public class AccountController : ApiBaseController
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindByEmailFromClaimsPrincipal(User); // User: Claimsprincipal associated
 
         return new UserDto
         {
@@ -48,12 +52,28 @@ public class AccountController : ApiBaseController
 
     [Authorize]
     [HttpGet("address")]
-    public async Task<ActionResult<Address>> GetUserAddress()
+    public async Task<ActionResult<AddressDto>> GetUserAddress()
     {
-        var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindUserByClaimsPrincipleWithAddressAsync(User);
 
-        return user.Address;
+        return _mapper.Map<Address, AddressDto>(user.Address);
+    }
+
+    [Authorize]
+    [HttpPut("address")]
+    public async Task<ActionResult<AddressDto>> UpdateUserAddress([FromBody] AddressDto address)
+    {
+        var user = await _userManager.FindUserByClaimsPrincipleWithAddressAsync(HttpContext.User);
+
+        user.Address = _mapper.Map<AddressDto, Address>(address);
+
+        var result = await _userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            return Ok(_mapper.Map<Address, AddressDto>(user.Address));
+        }
+        return BadRequest("Failed to update user address!");
     }
 
     [HttpPost("login")]
