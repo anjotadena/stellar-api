@@ -13,6 +13,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddSwaggerDocumentaion();
 
 var app = builder.Build();
 
@@ -53,16 +54,14 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
+app.UseSwaggerDocumentation();
+
 app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Swagger
-app.UseSwagger();
-app.UseSwaggerUI();
 
 app.MapControllers();
 
