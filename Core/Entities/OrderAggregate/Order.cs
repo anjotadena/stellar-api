@@ -1,6 +1,6 @@
 namespace Core.Entities.OrderAggregate;
 
-public class Order
+public class Order : BaseEntity
 {
     public Order()
     {

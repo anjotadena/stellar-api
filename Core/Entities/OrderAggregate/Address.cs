@@ -1,6 +1,6 @@
 namespace Core.Entities.OrderAggregate;
 
-public class Address
+public class Address : BaseEntity
 {
     public Address()
     {
