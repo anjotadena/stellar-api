@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Core.Entities;
+using Core.Entities.OrderAggregate;
 
 namespace Infrastructure.Data;
 
@@ -28,6 +29,13 @@ public class StellarDbContextSeed
             context.Products.AddRange(products);
         }
 
+        if (!context.DeliveryMethods.Any())
+        {
+            var deliveries = GetEntityData<List<DeliveryMethod>>("../Infrastructure/Data/SeedData/delivery.json");
+
+            context.DeliveryMethods.AddRange(deliveries);
+        }
+
         if (context.ChangeTracker.HasChanges())
         {
             await context.SaveChangesAsync();
@@ -37,6 +45,10 @@ public class StellarDbContextSeed
     private static T GetEntityData<T>(string path)
     {
         var data = File.ReadAllText(path);
+
+        if (data is null) {
+            return default;
+        }
 
         return JsonSerializer.Deserialize<T>(data);
     }
