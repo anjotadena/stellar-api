@@ -16,6 +16,7 @@ public static class ApplicationServicesExtensions
     {
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
