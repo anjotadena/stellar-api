@@ -1,3 +1,4 @@
+using System.Net;
 using API.DTO;
 using API.Errors;
 using API.Extensions;
@@ -36,6 +37,29 @@ namespace API.Controllers
             }
 
             return Ok(order);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetOrdersForUser()
+        {
+            var email = User.RetrieveEmailFromPrincipal();
+            var orders = await _orderService.GetOrdersForUserAsync(email);
+
+            return Ok(_mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
+        {
+            var email = User.RetrieveEmailFromPrincipal();
+            var order = await _orderService.GetOrderByIdAsync(id, email);
+
+            if (order is null)
+            {
+                return NotFound(new ApiResponse((int)HttpStatusCode.NotFound));
+            }
+
+            return Ok(_mapper.Map<OrderToReturnDto>(order));
         }
     }
 }

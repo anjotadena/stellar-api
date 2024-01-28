@@ -27,7 +27,7 @@ public class Order : BaseEntity
 
     public decimal Subtotal { get; set; }
 
-    public OrderStatus Status { get; set; }
+    public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
     public string PaymentIntentId { get; set; }
 
