@@ -5,7 +5,6 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,7 +38,7 @@ public class ProductsController : ApiBaseController
         var countSpec = new ProductFilterCountSpecification(productSpecParams);
 
         var totalItems = await _productRepository.CountAsync(countSpec);
-        var products = await this._productRepository.ListAsync(spec);
+        var products = await _productRepository.ListAsync(spec);
 
         var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductResponseDto>>(products);
 
@@ -52,7 +51,7 @@ public class ProductsController : ApiBaseController
     public async Task<ActionResult<ProductResponseDto>> GetProduct(int id)
     {
         var spec = new ProductsSpecification(id);
-        var product = await this._productRepository.GetEntityWithSpec(spec);
+        var product = await _productRepository.GetEntityWithSpec(spec);
 
         if (product is null)
         {
@@ -66,13 +65,13 @@ public class ProductsController : ApiBaseController
     [ProducesResponseType(typeof(ProductBrand[]), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProductBrand>>> GetBrands()
     {
-        return Ok(await this._productBrandRepository.GetAllAsync());
+        return Ok(await _productBrandRepository.GetAllAsync());
     }
 
     [HttpGet("types")]
     [ProducesResponseType(typeof(ProductType[]), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProductType>>> GetTypes()
     {
-        return Ok(await this._productTypeRepository.GetAllAsync());
+        return Ok(await _productTypeRepository.GetAllAsync());
     }
 }
