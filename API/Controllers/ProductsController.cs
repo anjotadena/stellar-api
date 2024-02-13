@@ -5,7 +5,6 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -30,7 +29,6 @@ public class ProductsController : ApiBaseController
         _mapper = mapper;
     }
 
-    [Authorize]
     [HttpGet]
     public async Task<ActionResult<Pagination<ProductResponseDto>>> GetProducts([FromQuery] ProductSpecParams productSpecParams)
     {

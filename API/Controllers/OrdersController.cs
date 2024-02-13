@@ -61,5 +61,13 @@ namespace API.Controllers
 
             return Ok(_mapper.Map<OrderToReturnDto>(order));
         }
+
+        [HttpGet("delivery-methods")]
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
+        {
+            var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
+
+            return Ok(_mapper.Map<IReadOnlyList<DeliveryMethod>>(deliveryMethods));
+        }
     }
 }
