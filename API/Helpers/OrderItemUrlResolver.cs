@@ -20,6 +20,6 @@ public class OrderItemUrlResolver : IValueResolver<OrderItem, OrderItemDto, stri
             return null;
         }
 
-        return _configuration["ApiUrl"] + source.ItemOrdered.PictureUrl;
+        return _configuration["ApiUrl"] + "/" + source.ItemOrdered.PictureUrl;
     }
 }
