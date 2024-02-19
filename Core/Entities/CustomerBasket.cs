@@ -20,4 +20,6 @@ public class CustomerBasket
     public string ClientSecret { get; set; }
 
     public string PaymentIntentId { get; set; }
+
+    public decimal ShippingPrice { get; set; }
 }
